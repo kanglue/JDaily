@@ -26,7 +26,7 @@ public class ImageLoader
 	 */
 	private LruCache<String, Bitmap> mLruCache;
 	/**
-	 * 线程
+	 * 线程�?
 	 */
 	private ExecutorService mThreadPool;
 	/**
@@ -34,7 +34,7 @@ public class ImageLoader
 	 */
 	private int mThreadCount = 1;
 	/**
-	 * 队列的调度方
+	 * 队列的调度方�?
 	 */
 	private Type mType = Type.LIFO;
 	/**
@@ -42,7 +42,7 @@ public class ImageLoader
 	 */
 	private LinkedList<Runnable> mTasks;
 	/**
-	 * 轮询的线
+	 * 轮询的线�?
 	 */
 	private Thread mPoolThread;
 	private Handler mPoolThreadHander;
@@ -53,19 +53,19 @@ public class ImageLoader
 	private Handler mHandler;
 
 	/**
-	 * 引入为1的信号量，防止mPoolThreadHander未初始化完成
+	 * 引入�?个�?�为1的信号量，防止mPoolThreadHander未初始化完成
 	 */
 	private volatile Semaphore mSemaphore = new Semaphore(1);
 
 	/**
-	 * 引入为1的信号量，由于线程池内部也有�?个阻塞线程，防止加入任务的度过快，使LIFO效果不明
+	 * 引入�?个�?�为1的信号量，由于线程池内部也有�?个阻塞线程，防止加入任务的�?�度过快，使LIFO效果不明�?
 	 */
 	private volatile Semaphore mPoolSemaphore;
 
 	private static ImageLoader mInstance;
 
 	/**
-	 * 队列的调度方
+	 * 队列的调度方�?
 	 * 
 	 * @author zhy
 	 * 
@@ -77,7 +77,7 @@ public class ImageLoader
 
 
 	/**
-	 * 单例获得该实例对
+	 * 单例获得该实例对�?
 	 * 
 	 * @return
 	 */
@@ -112,7 +112,7 @@ public class ImageLoader
 			{
 				try
 				{
-					// 请求个信号量
+					// 请求�?个信号量
 					mSemaphore.acquire();
 				} catch (InterruptedException e)
 				{
@@ -133,14 +133,14 @@ public class ImageLoader
 						}
 					}
 				};
-				// 释放个信号量
+				// 释放�?个信号量
 				mSemaphore.release();
 				Looper.loop();
 			}
 		};
 		mPoolThread.start();
 
-		// 获取应用程序大可用内
+		// 获取应用程序�?大可用内�?
 		int maxMemory = (int) Runtime.getRuntime().maxMemory();
 		int cacheSize = maxMemory / 8;
 		mLruCache = new LruCache<String, Bitmap>(cacheSize)
@@ -233,7 +233,7 @@ public class ImageLoader
 	}
 	
 	/**
-	 * 添加个任
+	 * 添加�?个任�?
 	 * 
 	 * @param runnable
 	 */
@@ -252,7 +252,7 @@ public class ImageLoader
 	}
 
 	/**
-	 * 取出个任
+	 * 取出�?个任�?
 	 * 
 	 * @return
 	 */
@@ -269,7 +269,7 @@ public class ImageLoader
 	}
 	
 	/**
-	 * 单例获得该实例对
+	 * 单例获得该实例对�?
 	 * 
 	 * @return
 	 */
@@ -291,7 +291,7 @@ public class ImageLoader
 
 
 	/**
-	 * 根据ImageView获得适当的压缩的宽和
+	 * 根据ImageView获得适当的压缩的宽和�?
 	 * 
 	 * @param imageView
 	 * @return
@@ -330,7 +330,7 @@ public class ImageLoader
 	}
 
 	/**
-	 * 从LruCache中获取一张图片，如果不存在就返回null
+	 * 从LruCache中获取一张图片，如果不存在就返回null�?
 	 */
 	private Bitmap getBitmapFromLruCache(String key)
 	{
@@ -338,7 +338,7 @@ public class ImageLoader
 	}
 
 	/**
-	 * LruCache中添加一张图
+	 * �?LruCache中添加一张图�?
 	 * 
 	 * @param key
 	 * @param bitmap
@@ -353,7 +353,7 @@ public class ImageLoader
 	}
 
 	/**
-	 * 计算inSampleSize，用于压缩图
+	 * 计算inSampleSize，用于压缩图�?
 	 * 
 	 * @param options
 	 * @param reqWidth

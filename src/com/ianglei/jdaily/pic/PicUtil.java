@@ -35,21 +35,32 @@ import android.util.Log;
 public class PicUtil
 {
 	private static final String TAG = "PicUtil";  
-
+	  
+    /** 
+     * 根据一个网络连接(URL)获取bitmapDrawable图像 
+     *  
+     * @param imageUri 
+     * @return 
+     */  
     public static BitmapDrawable getfriendicon(URL imageUri) {  
   
         BitmapDrawable icon = null;  
         try {  
             HttpURLConnection hp = (HttpURLConnection) imageUri  
                     .openConnection();  
-            icon = new BitmapDrawable(hp.getInputStream());// 锟斤拷锟斤拷锟斤拷锟斤拷转锟斤拷锟斤拷bitmap  
-            hp.disconnect();// 锟截憋拷锟斤拷锟斤拷  
+            icon = new BitmapDrawable(hp.getInputStream());// 将输入流转换成bitmap  
+            hp.disconnect();// 关闭连接  
         } catch (Exception e) {  
         }  
         return icon;  
     }  
   
-
+    /** 
+     * 根据一个网络连接(String)获取bitmapDrawable图像 
+     *  
+     * @param imageUri 
+     * @return 
+     */  
     public static BitmapDrawable getcontentPic(String imageUri) {  
         URL imgUrl = null;  
         try {  
@@ -60,16 +71,21 @@ public class PicUtil
         BitmapDrawable icon = null;  
         try {  
             HttpURLConnection hp = (HttpURLConnection) imgUrl.openConnection();  
-            icon = new BitmapDrawable(hp.getInputStream());// 锟斤拷锟斤拷锟斤拷锟斤拷转锟斤拷锟斤拷bitmap  
-            hp.disconnect();// 锟截憋拷锟斤拷锟斤拷  
+            icon = new BitmapDrawable(hp.getInputStream());// 将输入流转换成bitmap  
+            hp.disconnect();// 关闭连接  
         } catch (Exception e) {  
         }  
         return icon;  
     }  
   
-
+    /** 
+     * 根据一个网络连接(URL)获取bitmap图像 
+     *  
+     * @param imageUri 
+     * @return 
+     */  
     public static Bitmap getusericon(URL imageUri) {  
-        // 锟斤拷示锟斤拷锟斤拷锟较碉拷图片  
+        // 显示网络上的图片  
         URL myFileUrl = imageUri;  
         Bitmap bitmap = null;  
         try {  
@@ -86,9 +102,15 @@ public class PicUtil
         return bitmap;  
     }  
   
-
+    /** 
+     * 根据一个网络连接(String)获取bitmap图像 
+     *  
+     * @param imageUri 
+     * @return 
+     * @throws MalformedURLException 
+     */  
     public static Bitmap getbitmap(String imageUri) {  
-
+        // 显示网络上的图片  
         Bitmap bitmap = null;  
         try {  
             URL myFileUrl = new URL(imageUri);  
@@ -108,11 +130,18 @@ public class PicUtil
         return bitmap;  
     }  
   
-
+    /** 
+     * 下载图片 同时写道本地缓存文件中 
+     *  
+     * @param context 
+     * @param imageUri 
+     * @return 
+     * @throws MalformedURLException 
+     */  
     public static Bitmap getbitmapAndwrite(String imageUri) {  
         Bitmap bitmap = null;  
         try {  
-
+            // 显示网络上的图片  
             URL myFileUrl = new URL(imageUri);  
             HttpURLConnection conn = (HttpURLConnection) myFileUrl  
                     .openConnection();  
@@ -134,7 +163,7 @@ public class PicUtil
   
             byte[] buf = new byte[1024];  
             int len = 0;  
-
+            // 将网络上的图片存储到本地  
             while ((len = is.read(buf)) > 0) {  
                 bos.write(buf, 0, len);  
             }  
@@ -142,7 +171,7 @@ public class PicUtil
             is.close();  
             bos.close();  
   
-
+            // 从本地加载图片  
             bitmap = BitmapFactory.decodeFile(cacheFile.getCanonicalPath());  
             //String name = MD5Util.MD5(imageUri);  
   
@@ -187,7 +216,13 @@ public class PicUtil
         }  
     }  
   
-
+    /** 
+     * 将文件写入缓存系统中 
+     *  
+     * @param filename 
+     * @param is 
+     * @return 
+     */  
     public static String writefile(Context context, String filename,  
             InputStream is) {  
         BufferedInputStream inputStream = null;  
@@ -222,7 +257,7 @@ public class PicUtil
         return context.getFilesDir() + "/" + filename + ".jpg";  
     }  
   
-
+    // 放大缩小图片  
     public static Bitmap zoomBitmap(Bitmap bitmap, int w, int h) {  
         int width = bitmap.getWidth();  
         int height = bitmap.getHeight();  
@@ -235,7 +270,7 @@ public class PicUtil
         return newbmp;  
     }  
   
-
+    // 将Drawable转化为Bitmap  
     public static Bitmap drawableToBitmap(Drawable drawable) {  
         int width = drawable.getIntrinsicWidth();  
         int height = drawable.getIntrinsicHeight();  
@@ -249,7 +284,7 @@ public class PicUtil
   
     }  
   
-
+    // 获得圆角图片的方法  
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {  
         if(bitmap == null){  
             return null;  
@@ -274,7 +309,7 @@ public class PicUtil
         return output;  
     }  
   
-
+    // 获得带倒影的图片方法  
     public static Bitmap createReflectionImageWithOrigin(Bitmap bitmap) {  
         final int reflectionGap = 4;  
         int width = bitmap.getWidth();  

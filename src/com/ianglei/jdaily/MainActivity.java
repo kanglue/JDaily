@@ -60,7 +60,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager()
 				.beginTransaction();
 
-
 		MenuFragment menuFragment = new MenuFragment();
 		menuFragment.setOnMenuItemClickListener(this);
 		fragmentTransaction.replace(R.id.menu, menuFragment);
@@ -72,17 +71,13 @@ public class MainActivity extends SlidingFragmentActivity implements
 		sm.setShadowDrawable(R.drawable.shadow);
 		sm.setBehindOffset(100);
 		sm.setFadeDegree(0.35f);
-
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-
 
 		tabTitles = getResources().getStringArray(R.array.tab_title);
 		fragmentList = new ArrayList<Fragment>();
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-
 		actionBar = getSupportActionBar();
-
 
 		actionBar.setDisplayShowTitleEnabled(true);
 
@@ -94,7 +89,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 		// actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_gradient));
 
-
 		for (int i = 0; i < tabTitles.length; i++)
 		{
 			ActionBar.Tab tab = actionBar.newTab();
@@ -102,7 +96,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 			tab.setTabListener(this);
 			actionBar.addTab(tab, i);
 		}
-
 
 		for (int i = 0; i < tabTitles.length; i++)
 		{
@@ -113,7 +106,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 			fragmentList.add(fragment);
 		}
-
 
 		viewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(),
 				fragmentList));

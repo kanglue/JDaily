@@ -1,18 +1,12 @@
 package com.ianglei.jdaily.db;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
-import android.R.integer;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Parcelable;
 import android.util.Log;
 
 import com.ianglei.jdaily.model.ListeningItem;
@@ -23,7 +17,7 @@ public class ListeningDBHelper
 {
 	public static final String TAG = "ListeningDBHelper";
 	
-	public static final String TABLE_NAME = "t_listening";
+	public static final String TABLE_NAME = "Listening";
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_CATEGORY = "category";
@@ -82,6 +76,27 @@ public class ListeningDBHelper
 		}
 	}
 	
+	public static boolean isListeningExist(String id)
+	{
+		boolean result;
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
+        selectQuery =  selectQuery + " where id='" + id + "'";
+        Log.i(TAG, selectQuery);
+        SQLiteDatabase db = DBAgent.getInstance().getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor.moveToNext())
+        {
+        	result = true;
+        }
+        else
+        {
+        	result = false;
+        }
+        
+        cursor.close();
+        return result;
+	}
+	
 	public static List<ListeningItem> getItemDetail(String id) {
         List<ListeningItem> itemList = new ArrayList<ListeningItem>();
         
@@ -115,7 +130,7 @@ public class ListeningDBHelper
         return itemList;
     }
 	
-	public static ArrayList<ListeningItem> getItemList(int category) {
+	public static ArrayList<ListeningItem> getItemListByCategory(int category) {
         ArrayList<ListeningItem> itemList = new ArrayList<ListeningItem>();
         
         String selectQuery = "SELECT " + COLUMN_ID + "," + COLUMN_TITLE + "," 
@@ -181,6 +196,19 @@ public class ListeningDBHelper
 		//db.close();
 	}
 	
+	public synchronized static void updateCoverImgPath(ListeningItem item)
+	{
+		String localPath = item.getCoverpath();
+		Log.i(TAG, "Update url path:"+localPath); 
+		
+		SQLiteDatabase db = DBAgent.getInstance().getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_COVERPATH, localPath);
+		int resultrow = db.update(TABLE_NAME, values, "id=?", new String[]{item.getId()});
+		Log.i(TAG, "Update row " + resultrow);
+		//db.close();
+	}
+	
 	public static void updateTranscript(ListeningItem item)
 	{
 		Log.i(TAG, "Update Listening item: id="+item.getId() +"'s transcript"); 
@@ -191,6 +219,17 @@ public class ListeningDBHelper
 		int resultrow = db.update(TABLE_NAME, values, "id=?", new String[]{item.getId()});
 		Log.i(TAG, "Update row " + resultrow);
 		//db.close();
+	}
+	
+	public static void updateMp3Path(ListeningItem item)
+	{
+		Log.i(TAG, "Update Listening item: id="+item.getId() +"'s mp3 path"); 
+		
+		SQLiteDatabase db = DBAgent.getInstance().getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_MP3PATH, item.getMp3path());
+		int resultrow = db.update(TABLE_NAME, values, "id=?", new String[]{item.getId()});
+		Log.i(TAG, "Update row " + resultrow);
 	}
 	
 	public static ListeningItem queryDetailById(ListeningItem item)

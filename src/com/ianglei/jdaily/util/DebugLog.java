@@ -323,8 +323,7 @@ public final class DebugLog
             Log.d(TAG, "Not allow write SD card!");
             ret = false;
         }
-        if (ret) return true;
-        else return false;
+        return ret;
     }
     
     private static File chooseFileName(String type)
@@ -371,7 +370,7 @@ public final class DebugLog
             {
                 @Override
                 public int compare(String arg1, String arg2)
-                {
+                { //逆排�?                
                     String str1 = arg1.substring(0, 13);
                     String str2 = arg2.substring(0, 13);
                     return str2.compareTo(str1);

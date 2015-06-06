@@ -28,7 +28,7 @@ public class ImageLoader {
 	private AbstractFileCache fileCache;
 	private Map<ImageView, String> imageViews = Collections
 			.synchronizedMap(new WeakHashMap<ImageView, String>());
-
+	// 线程池
 	private ExecutorService executorService;
 
 	public ImageLoader(Context context) {
@@ -36,15 +36,17 @@ public class ImageLoader {
 		executorService = Executors.newFixedThreadPool(5);
 	}
 
-
+	// 最主要的方法
 	public void DisplayImage(String url, ImageView imageView, boolean isLoadOnlyFromCache) {
 		imageViews.put(imageView, url);
+		// 先从内存缓存中查找
 
 		Bitmap bitmap = memoryCache.get(url);
 		if (bitmap != null)
 			imageView.setImageBitmap(bitmap);
 		else if (!isLoadOnlyFromCache){
 			
+			// 若没有的话则开启新线程加载图片
 			queuePhoto(url, imageView);
 		}
 	}
@@ -57,6 +59,7 @@ public class ImageLoader {
 	private Bitmap getBitmap(String url) {
 		File f = fileCache.getFile(url);
 		
+		// 先从文件缓存中查找是否有
 		Bitmap b = null;
 		if (f != null && f.exists()){
 			b = decodeFile(f);
@@ -64,7 +67,7 @@ public class ImageLoader {
 		if (b != null){
 			return b;
 		}
-
+		// 最后从指定的url中下载图片
 		try {
 			Bitmap bitmap = null;
 			URL imageUrl = new URL(url);
@@ -85,6 +88,7 @@ public class ImageLoader {
 		}
 	}
 
+	// decode这个图片并且按比例缩放以减少内存消耗，虚拟机对每张图片的缓存大小也是有限制的
 	private Bitmap decodeFile(File f) {
 		try {
 			// decode image size
@@ -141,14 +145,14 @@ public class ImageLoader {
 			if (imageViewReused(photoToLoad))
 				return;
 			BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
-			// 锟斤拷锟铰的诧拷锟斤拷锟斤拷锟斤拷UI锟竭筹拷锟斤拷
+			// 更新的操作放在UI线程中
 			Activity a = (Activity) photoToLoad.imageView.getContext();
 			a.runOnUiThread(bd);
 		}
 	}
 
 	/**
-	 * 锟斤拷止图片锟斤拷位
+	 * 防止图片错位
 	 * 
 	 * @param photoToLoad
 	 * @return
@@ -160,7 +164,7 @@ public class ImageLoader {
 		return false;
 	}
 
-	// 锟斤拷锟斤拷锟斤拷UI锟竭筹拷锟叫革拷锟铰斤拷锟斤拷
+	// 用于在UI线程中更新界面
 	class BitmapDisplayer implements Runnable {
 		Bitmap bitmap;
 		PhotoToLoad photoToLoad;

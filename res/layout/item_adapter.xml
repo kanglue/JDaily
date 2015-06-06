@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/listitem"
     android:layout_width="fill_parent"
@@ -11,46 +11,32 @@
     <ImageView
         android:id="@+id/coverimg"
         android:layout_width="120dip"
-        android:layout_height="90dip"
-        android:layout_margin="10.0dip"
+        android:layout_height="67dip"
+        android:scaleType="centerInside" 
+        android:layout_margin="5.0dip"
         android:background="@drawable/rc_item_bg"
-        android:padding="2.0dip"
-        android:scaleType="fitXY" />
+        android:padding="0.5dip"
+        android:layout_centerVertical="true" />
     
-     <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10.0dip"
-                android:layout_toRightOf="@+id/coverimg"
-                android:layout_marginTop="14.0dip"
-                android:gravity="bottom"
-                android:orientation="vertical" >
-
-
-    <TextView
-        android:id="@+id/ItemTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="30.0dip"        
-        android:gravity="center_vertical"
-        android:textColor="@color/listTitle"
-        android:textSize="18.0sp" />
-
-
-    <TextView
-        android:id="@+id/ItemDesc"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/ItemTitle"
-        android:layout_toRightOf="@id/coverimg"
-		android:gravity="center_vertical"
-        android:ellipsize="marquee"
-        android:textColor="@color/text"
-        android:textSize="13.0sp" />
+			
+			    <TextView
+			        android:id="@+id/ItemTitle"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"        
+			        android:layout_toRightOf="@id/coverimg"
+			        android:layout_alignParentTop="true"
+			        android:textColor="@color/listTitle"
+			        android:textSize="@dimen/list_title_text_size" />			
+			
+			    <TextView
+			        android:id="@+id/ItemDesc"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_below="@id/ItemTitle"
+			        android:layout_toRightOf="@id/coverimg"
+					android:layout_alignParentBottom="true"
+			        android:ellipsize="marquee"
+			        android:textColor="@color/text"
+			        android:textSize="@dimen/list_content_text_size" />
     
-    </LinearLayout>
-    
-
-         
-         
-
 </RelativeLayout>

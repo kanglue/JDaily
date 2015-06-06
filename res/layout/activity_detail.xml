@@ -1,52 +1,66 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:baselineAligned="false"
+    android:orientation="vertical"
     android:background="@android:color/white" >
 
-              <LinearLayout
-                  android:id="@+id/player"
-		         android:layout_width="fill_parent"
-		         android:layout_height="fill_parent"
-		         android:gravity="top"
-		         android:visibility="gone"
-		         android:orientation="horizontal">
-         
-                  <ImageButton 
-                      android:id="@+id/play"
-                      android:layout_width="wrap_content" 
-						android:layout_height="wrap_content" 
-						android:src="@drawable/play" 
-						android:contentDescription="play"
-                      />
-                  
-                  <ImageButton 
-                      android:id="@+id/pause"
-                      android:layout_width="wrap_content" 
-						android:layout_height="wrap_content" 
-						android:src="@drawable/pause" 
-						android:contentDescription="pause"
-                      />
-                  <ImageButton 
-                      android:id="@+id/stop"
-                      android:layout_width="wrap_content" 
-						android:layout_height="wrap_content" 
-						android:src="@drawable/stop" 
-						android:contentDescription="stop"
-                      />
-                  <SeekBar 
-                      android:id="@+id/seekbar"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:thumb="@drawable/item_higlight"
-                      />
-                  
-                  
-                       </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/player"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/play_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:text="00:00"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                style="@style/player_progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_toLeftOf="@+id/all_time"
+                android:layout_toRightOf="@+id/play_time" />
+            
+
+
+                            <TextView
+                                android:id="@+id/all_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBaseline="@+id/play"
+                                android:layout_alignBottom="@+id/play"
+                                android:layout_toLeftOf="@+id/play"
+                                android:text="00:00"
+                                android:textColor="#000000"
+                                android:textSize="12sp" />
+                            
+                             <Button
+                                android:id="@+id/play"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_gravity="right"
+                                android:background="@drawable/pause" />
+                            
+        </RelativeLayout>  
+
          
      <ScrollView
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent">
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content" >
              
               <LinearLayout
                   android:id="@+id/details"
@@ -92,21 +106,36 @@
              android:textColor="@color/listTitle"
              android:textSize="18.0sp" />
 
-         <ProgressBar 
-	android:id="@+id/ProgressBar" 
-	style="?android:attr/progressBarStyleLarge" 
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent" 
-	android:layout_gravity="center_vertical"
-	android:max="100" 
-	android:progress="50" 
-	android:secondaryProgress="70" 
-	android:visibility="gone" />
+
          
      </LinearLayout>
      
                        </ScrollView>
                        
-     		
+     
+                       
+     <LinearLayout
+        android:id="@+id/pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal" >
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/sudu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:text="Loading"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
 	private List<Fragment> list;
-	
+
 	public TabPagerAdapter(FragmentManager fm, List<Fragment> list) {
 		super(fm);
 		this.list = list;

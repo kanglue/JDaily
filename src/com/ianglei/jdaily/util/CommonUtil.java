@@ -2,21 +2,12 @@ package com.ianglei.jdaily.util;
 
 
 
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.TrafficStats;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.view.Display;
 import android.view.WindowManager;
@@ -36,9 +27,9 @@ public class CommonUtil {
 	
 	public static String getRootFilePath() {
 		if (hasSDCard()) {
-			return Environment.getExternalStorageDirectory().getAbsolutePath() + "/";// filePath:/sdcard/
+			return Environment.getExternalStorageDirectory().getAbsolutePath() + "/jdaily/";// filePath:/sdcard/
 		} else {
-			return Environment.getDataDirectory().getAbsolutePath() + "/data/"; // filePath: /data/data/
+			return Environment.getDataDirectory().getAbsolutePath() + "/data/com.ianglei.jdaily/"; // filePath: /data/data/
 		}
 	}
 	
@@ -78,5 +69,5 @@ public class CommonUtil {
 		Display display = manager.getDefaultDisplay();
 		return display.getHeight();
 	}
-	
+
 }

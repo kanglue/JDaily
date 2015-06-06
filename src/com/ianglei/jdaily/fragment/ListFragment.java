@@ -1,31 +1,38 @@
 package com.ianglei.jdaily.fragment;
 
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.ianglei.jdaily.ImageLoader;
 import com.ianglei.jdaily.R;
+import com.ianglei.jdaily.ImageLoader.Type;
 import com.ianglei.jdaily.db.ListeningDBHelper;
 import com.ianglei.jdaily.http.HttpAgent;
 import com.ianglei.jdaily.model.ListeningItem;
 import com.ianglei.jdaily.rss.RSSBBC6minParser;
-import com.loopj.android.http.*;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class ListFragment extends Fragment
 {
@@ -42,8 +49,6 @@ public class ListFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-        AsyncHttpClient client = new AsyncHttpClient();
-
 		View contextView = inflater.inflate(R.layout.fragment_list, container,
 				false);
 		ListView listView = (ListView) contextView
@@ -54,13 +59,15 @@ public class ListFragment extends Fragment
 		
 		loadingBar = (ProgressBar)contextView.findViewById(R.id.ProgressBar);
 
+		
 		Bundle mBundle = getArguments();
 		String title = mBundle.getString("arg");
 
 		if (title.equalsIgnoreCase("6 Minute English"))
 		{
-			ArrayList<ListeningItem> list = ListeningDBHelper.getItemList(6);
+			ArrayList<ListeningItem> list = ListeningDBHelper.getItemListByCategory(6);
 
+			//如果数据为空需要获取
 			if (list.size() == 0)
 			{
 				// textView.setText("No Record");
@@ -69,6 +76,7 @@ public class ListFragment extends Fragment
 				task.execute(new Integer(0));
 			} else
 			{
+				//有本地数据也需要尝试更新
 				listAdapter.addItem(list);
 			}
 
@@ -88,6 +96,7 @@ public class ListFragment extends Fragment
             if (msg.what == 1 && msg.obj != null)
             {
                 //fullScreenPlay((Channel)msg.obj);
+            	//Click to go detail
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("currentpos", (Parcelable)msg.obj);
                 getActivity().startActivity(intent);
@@ -116,6 +125,7 @@ public class ListFragment extends Fragment
 			{
 				doc = Jsoup.connect(httpurl).timeout(45000).get();
 				
+				//概要描述
 				int itemcount = doc.select("div.details > p").size();
 				
 				for(int k = 0; k < itemcount; k++)
@@ -125,21 +135,27 @@ public class ListFragment extends Fragment
 					String dateText = dateElement.text();
 					Log.d(TAG, "Date: " + dateText);
 					
-					///learningenglish/english/features/6-minute-english/ep-150205
+					//主题					
 					Element ahrefElement = doc.select("h2 > a[href*=/6-minute-english/]").get(k);
 					String titleText = ahrefElement.text();
 					Log.d(TAG, "Title: " + titleText);
 					
+					//拼接绝对地址 learningenglish/english/features/6-minute-english/ep-150205
 					String urlText = "http://www.bbc.co.uk" + ahrefElement.attr("href");
 					Log.d(TAG, "URL: " + urlText);
-							
 					
+					//图片
 					Element jpgElement = doc.select("img[data-pid]").get(k);
 					String jpgURL = jpgElement.attr("src");
 					Log.d(TAG, "JPG: " + jpgURL);
+					
+
+					
+					//图片pid作为唯一标识
 					String pid = jpgElement.attr("data-pid");
 					Log.d(TAG, "Pid: " + pid);
 					
+					//概要描述
 					Element descElement = doc.select("div.details > p").get(k);
 					String descText = descElement.text();
 					Log.d(TAG, "Desc: " + descText);
@@ -155,10 +171,6 @@ public class ListFragment extends Fragment
 					item.setTitle(titleText);
 					item.setUpdated(dateText);
 					
-					
-					//DownPicTask task = new DownPicTask();
-					//task.execute(item);
-
 					list.add(item);
 				}
 				
@@ -168,7 +180,7 @@ public class ListFragment extends Fragment
 				e.printStackTrace();
 			}
 			
-			new Thread(runnable).start();
+			new Thread(insertRunnable).start();
 
 			return list;
 		}
@@ -189,7 +201,7 @@ public class ListFragment extends Fragment
 
 	}
 	
-	Runnable runnable = new Runnable() {
+	Runnable insertRunnable = new Runnable() {
 		
 		@Override
 		public void run()
@@ -198,38 +210,43 @@ public class ListFragment extends Fragment
 			{
 				for(ListeningItem item : list)
 				{
-					ListeningDBHelper.insertListeningInfo(item);
+					if(!ListeningDBHelper.isListeningExist(item.getId()))
+					{
+						ListeningDBHelper.insertListeningInfo(item);
+						
+						// TODO should check picpath start with http or not
+						
+						//Download pic for new insert
+						DownPicTask task = new DownPicTask();
+						task.execute(item);
+					}
 				}
-			}
-			
+			}			
 		}
 	};
 	
-//	class DownPicTask extends AsyncTask<ListeningItem, Integer, String>
-//	{
-//		String result;
-//		ListeningItem item;
-//		
-//		@Override
-//		protected String doInBackground(ListeningItem... params)
-//		{
-//			item = params[0];
-//			result = HttpAgent.downloadResource(params[0].getCoverpath());
-//			
-//			return result;
-//		}
-//		
-//		@Override
-//		protected void onPostExecute(String result)
-//		{
-//			super.onPostExecute(result);
-//			item.setCoverpath(result);
-//			ListeningDBHelper.updateCoverImgPath(item);
-//			
-//			
-//		}
-//		
-//	}
+	class DownPicTask extends AsyncTask<ListeningItem, Integer, String>
+	{
+		String result;
+		ListeningItem item;
+		
+		@Override
+		protected String doInBackground(ListeningItem... params)
+		{
+			item = params[0];
+			result = HttpAgent.downloadResource(params[0].getCoverpath());
+			
+			return result;
+		}
+		
+		@Override
+		protected void onPostExecute(String result)
+		{
+			super.onPostExecute(result);
+			item.setCoverpath(result);
+			ListeningDBHelper.updateCoverImgPath(item);
+		}
+	}
 
 
 	@Override

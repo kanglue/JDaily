@@ -34,7 +34,9 @@ public class HttpAgent
 {
 	public static final String TAG = "HttpAgent";
 	
-
+	/**获取指定地址的网页数据
+	* 返回数据流
+	*/
 	public static InputStream streampost(String remote_addr)
 	{
 	    URL infoUrl = null;
@@ -178,7 +180,10 @@ public class HttpAgent
     }
 	
 	
-
+	/**获取参数(ArrayList<NameValuePair> nameValuePairs,String url)后post给远程服务器
+	* 将获得的返回结果(String)返回给调用者
+	* 本函数适用于查询数量较少的时候
+	*/
 	public String posturl(ArrayList<NameValuePair> nameValuePairs,String url){
 	    String result = "";
 	    String tmp= "";
