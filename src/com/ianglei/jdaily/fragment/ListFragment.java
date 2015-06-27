@@ -1,11 +1,7 @@
 package com.ianglei.jdaily.fragment;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,31 +11,28 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.ianglei.jdaily.ImageLoader;
 import com.ianglei.jdaily.R;
-import com.ianglei.jdaily.ImageLoader.Type;
 import com.ianglei.jdaily.db.ListeningDBHelper;
 import com.ianglei.jdaily.http.HttpAgent;
 import com.ianglei.jdaily.model.ListeningItem;
 import com.ianglei.jdaily.rss.RSSBBC6minParser;
+import com.ianglei.jdaily.xlist.XListView;
+import com.ianglei.jdaily.xlist.XListView.IXListViewListener;
 
-public class ListFragment extends Fragment
+public class ListFragment extends Fragment implements IXListViewListener
 {
 
 	private static final String TAG = "ListFragment";
-	
-	ListAdapter listAdapter;
+	private XListView listView;
+	private ListAdapter listAdapter;
 	
 	private ProgressBar loadingBar; 
 	
@@ -51,8 +44,10 @@ public class ListFragment extends Fragment
 	{
 		View contextView = inflater.inflate(R.layout.fragment_list, container,
 				false);
-		ListView listView = (ListView) contextView
-				.findViewById(R.id.ListeningList);
+		listView = (XListView) contextView
+				.findViewById(R.id.xListView);
+		listView.setPullLoadEnable(true);
+		listView.setXListViewListener(this);
 		
 		listAdapter = new ListAdapter(getActivity(), listView, mHandler);
 		listView.setAdapter(listAdapter);
@@ -95,7 +90,6 @@ public class ListFragment extends Fragment
         {
             if (msg.what == 1 && msg.obj != null)
             {
-                //fullScreenPlay((Channel)msg.obj);
             	//Click to go detail
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("currentpos", (Parcelable)msg.obj);
@@ -253,6 +247,26 @@ public class ListFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
+	}
+
+	
+	private void onLoad() {
+		listView.stopRefresh();
+		listView.stopLoadMore();
+		listView.setRefreshTime("刚刚");
+	}
+
+	@Override
+	public void onRefresh() {
+
+		
+	}
+
+
+	@Override
+	public void onLoadMore() {
+
+		
 	}
 
 }

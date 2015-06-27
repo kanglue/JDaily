@@ -3,16 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-	<ListView
-            android:id="@+id/ListeningList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="#00000000"
-            android:divider="@drawable/rc_item_bg"
-            android:fadingEdge="none"
-            android:listSelector="#00000000"
-            android:scrollbarThumbVertical="@drawable/scrollbar" >
-    </ListView>
+	<com.ianglei.jdaily.xlist.XListView
+        android:id="@+id/xListView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" android:cacheColorHint="#00000000">
+    </com.ianglei.jdaily.xlist.XListView>
     
 		<ProgressBar 
 			android:id="@+id/ProgressBar" 
