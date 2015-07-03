@@ -33,8 +33,11 @@ public class ListFragment extends Fragment implements IXListViewListener
 	private static final String TAG = "ListFragment";
 	private XListView listView;
 	private ListAdapter listAdapter;
-	
+	private Handler mHandler;
 	private ProgressBar loadingBar; 
+	
+	private int startPos = 0;
+	private final int step = 10;
 	
 	ArrayList<ListeningItem> list = new ArrayList<ListeningItem>();
 
@@ -49,42 +52,36 @@ public class ListFragment extends Fragment implements IXListViewListener
 		listView.setPullLoadEnable(true);
 		listView.setXListViewListener(this);
 		
-		listAdapter = new ListAdapter(getActivity(), listView, mHandler);
+		mHandler = new Handler();
+		listAdapter = new ListAdapter(getActivity(), listView, handler);
 		listView.setAdapter(listAdapter);
 		
 		loadingBar = (ProgressBar)contextView.findViewById(R.id.ProgressBar);
-
-		
+				
 		Bundle mBundle = getArguments();
 		String title = mBundle.getString("arg");
 
 		if (title.equalsIgnoreCase("6 Minute English"))
 		{
-			ArrayList<ListeningItem> list = ListeningDBHelper.getItemListByCategory(6);
+			ArrayList<ListeningItem> list = ListeningDBHelper.getItemListByCategory(6, startPos);
+			startPos += step;
 
-			//如果数据为空需要获取
 			if (list.size() == 0)
 			{
-				// textView.setText("No Record");
-				// textView.setVisibility(View.VISIBLE);
 				RssTask task = new RssTask();
 				task.execute(new Integer(0));
 			} else
 			{
-				//有本地数据也需要尝试更新
 				listAdapter.addItem(list);
 			}
-
 		}
 		
-		
-
 		return contextView;
 	}
 	
 
 	
-    private Handler mHandler = new Handler()
+    private Handler handler = new Handler()
     {
         public void handleMessage(android.os.Message msg)
         {
@@ -98,6 +95,11 @@ public class ListFragment extends Fragment implements IXListViewListener
         }
     };
 
+    /**
+     * Get data from BBC
+     * @author jl
+     *
+     */
 	class RssTask extends AsyncTask<Integer, Integer, ArrayList<ListeningItem>>
 	{
 		@Override
@@ -124,8 +126,8 @@ public class ListFragment extends Fragment implements IXListViewListener
 				
 				for(int k = 0; k < itemcount; k++)
 				{
-					//Episode 150212 / 12 Feb 2015
-					Element dateElement = doc.select("div.details > h3").get(k);
+					//Episode 150212
+					Element dateElement = doc.select("div.details > h3 > b").get(k);
 					String dateText = dateElement.text();
 					Log.d(TAG, "Date: " + dateText);
 					
@@ -142,9 +144,7 @@ public class ListFragment extends Fragment implements IXListViewListener
 					Element jpgElement = doc.select("img[data-pid]").get(k);
 					String jpgURL = jpgElement.attr("src");
 					Log.d(TAG, "JPG: " + jpgURL);
-					
-
-					
+										
 					//图片pid作为唯一标识
 					String pid = jpgElement.attr("data-pid");
 					Log.d(TAG, "Pid: " + pid);
@@ -183,20 +183,23 @@ public class ListFragment extends Fragment implements IXListViewListener
 		protected void onPostExecute(ArrayList<ListeningItem> result)
 		{
 			listAdapter.addItem(result);
-			loadingBar.setVisibility(View.GONE);
+			//loadingBar.setVisibility(View.GONE);
+			onLoad();
 		}
 		
 		@Override
 		protected void onPreExecute()
 		{
 			super.onPreExecute();
-			loadingBar.setVisibility(View.VISIBLE);
+			//loadingBar.setVisibility(View.VISIBLE);
 		}
 
 	}
 	
-	Runnable insertRunnable = new Runnable() {
-		
+	/**
+	 * insert to db
+	 */
+	Runnable insertRunnable = new Runnable() {		
 		@Override
 		public void run()
 		{
@@ -209,10 +212,12 @@ public class ListFragment extends Fragment implements IXListViewListener
 						ListeningDBHelper.insertListeningInfo(item);
 						
 						// TODO should check picpath start with http or not
-						
 						//Download pic for new insert
 						DownPicTask task = new DownPicTask();
 						task.execute(item);
+					}
+					else {
+						Log.i(TAG, item.getId() + " has already exist.");
 					}
 				}
 			}			
@@ -258,15 +263,37 @@ public class ListFragment extends Fragment implements IXListViewListener
 
 	@Override
 	public void onRefresh() {
-
-		
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				RssTask task = new RssTask();
+				task.execute(new Integer(0));
+				onLoad();
+			}
+		}, 1000);
 	}
 
 
 	@Override
 	public void onLoadMore() {
-
-		
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				
+				list.addAll(ListeningDBHelper.getItemListByCategory(6, startPos));
+				
+				listAdapter.notifyDataSetChanged();
+				onLoad();
+				
+				if(ListeningDBHelper.getCountByCategory(6) == list.size())
+				{
+					listView.setPullLoadEnable(false);
+				}
+				else {
+					listView.setPullLoadEnable(true);
+				}
+			}
+		}, 1000);
 	}
 
 }

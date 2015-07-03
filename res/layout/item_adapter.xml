@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.ianglei.jdaily"
     android:id="@+id/listitem"
     android:layout_width="fill_parent"
     android:layout_height="70.0dip"
     android:background="@drawable/item"
     android:drawingCacheQuality="high"
     android:minHeight="70.0dip"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal" >
 
     <ImageView
         android:id="@+id/coverimg"
         android:layout_width="120dip"
-        android:layout_height="67dip"
+        android:layout_height="67.5dip"
         android:scaleType="centerInside" 
-        android:layout_margin="5.0dip"
+        android:layout_margin="2.0dip"
         android:background="@drawable/rc_item_bg"
         android:padding="0.5dip"
         android:layout_centerVertical="true" />
@@ -24,7 +26,8 @@
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"        
 			        android:layout_toRightOf="@id/coverimg"
-			        android:layout_alignParentTop="true"
+			        android:layout_toLeftOf="@+id/numbercircleprogress_bar"
+			        android:layout_alignParentTop="true"			        
 			        android:textColor="@color/listTitle"
 			        android:textSize="@dimen/list_title_text_size" />			
 			
@@ -34,9 +37,40 @@
 			        android:layout_height="wrap_content"
 			        android:layout_below="@id/ItemTitle"
 			        android:layout_toRightOf="@id/coverimg"
+			        android:layout_toLeftOf="@+id/numbercircleprogress_bar"
 					android:layout_alignParentBottom="true"
 			        android:ellipsize="marquee"
 			        android:textColor="@color/text"
 			        android:textSize="@dimen/list_content_text_size" />
+			    
+			    <com.ianglei.jdaily.fragment.DownPlayImageView
+			        android:id="@+id/DownPlay"
+			        android:scaleType="fitCenter"  
+			        android:src="@drawable/download"
+			        android:layout_height="30dp"
+    					android:layout_width="30dp"  
+    					android:focusable = "false"
+    					android:padding="2dp"
+    					android:layout_centerVertical="true"
+    					android:layout_alignParentRight="true"
+			        />
+			    
+    <com.ianglei.jdaily.NumberCircleProgressBar
+        android:id="@+id/numbercircleprogress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="2dp"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        custom:max="100"
+        custom:progress="0"
+        custom:progress_circle_radius="15dp"
+        custom:progress_fill_mode="rotate"
+        custom:progress_reached_color="#3498DB"
+        custom:progress_text_color="@android:color/black"
+        custom:progress_text_size="8sp"
+        custom:progress_text_visibility="visible"
+        custom:progress_unreached_color="#CCCCCC" />
     
 </RelativeLayout>

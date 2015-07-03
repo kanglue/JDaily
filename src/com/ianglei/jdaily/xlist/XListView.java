@@ -116,6 +116,11 @@ public class XListView extends ListView implements OnScrollListener {
 					}
 				});
 	}
+	
+	public int getHeaderViewHeight()
+	{
+		return mHeaderViewHeight;
+	}
 
 	@Override
 	public void setAdapter(ListAdapter adapter) {
@@ -297,8 +302,8 @@ public class XListView extends ListView implements OnScrollListener {
 			//Y轴位移
 			final float deltaY = ev.getRawY() - lastY;
 			lastY = ev.getRawY();
-			System.out.println("数据监测：" + getFirstVisiblePosition() + "---->"
-					+ getLastVisiblePosition());
+			//System.out.println("数据监测：" + getFirstVisiblePosition() + "---->"+ getLastVisiblePosition());
+					
 			//如果第一项可见并且header的可见高度>0或者是向下滑动，
 			//就说明用户在向下拉动或者是向上拉动header，也就是指示箭头显示的时候的状态，
 			//这时候调用了updateHeaderHeight，来更新header的高度，实现header可以跟随手指动作上下移动。

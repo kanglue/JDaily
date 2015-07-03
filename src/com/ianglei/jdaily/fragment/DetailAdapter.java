@@ -81,8 +81,8 @@ public class DetailAdapter extends BaseAdapter
 		
 		if(transcript == null)
 		{
-			TranscriptTask task = new TranscriptTask();
-			task.execute(item);			
+//			TranscriptTask task = new TranscriptTask();
+//			task.execute(item);			
 		}
 		else {
 			viewHolder.transTextView.setText(transcript);
@@ -91,56 +91,56 @@ public class DetailAdapter extends BaseAdapter
 		return null;
 	}
 	
-	class TranscriptTask extends AsyncTask<ListeningItem, Integer, String>
-	{
-		ListeningItem item;
-		
-		@Override
-		protected String doInBackground(ListeningItem... params)
-		{
-			item = params[0];
-			Document doc;
-			try
-			{
-				doc = Jsoup.connect(item.getLink()).timeout(45000).get();
-				int pcount = doc.select("div.text p, div.text br").size();
-				
-				StringBuilder builder = new StringBuilder(2048);
-							
-				for(int i = 0; i < pcount; i++)
-				{
-					Element dateElement = doc.select("div.text p, div.text br").get(i);
-					String dateText = dateElement.text();
-					builder.append(dateText);
-					builder.append("\n");
-				}
-				
-				transcript = builder.toString();
-				return transcript;
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-				return null;
-			}
-		}
-		
-		@Override
-		protected void onPostExecute(String result)
-		{
-			super.onPostExecute(result);
-			loadingBar.setVisibility(View.GONE);
-			transcriptTextView.setText(result);
-			item.setTranscript(result);
-			ListeningDBHelper.updateTranscript(item);
-		}
-		
-		@Override
-		protected void onPreExecute()
-		{
-			super.onPreExecute();
-			loadingBar.setVisibility(View.VISIBLE);
-		}
-	}
+//	class TranscriptTask extends AsyncTask<ListeningItem, Integer, String>
+//	{
+//		ListeningItem item;
+//		
+//		@Override
+//		protected String doInBackground(ListeningItem... params)
+//		{
+//			item = params[0];
+//			Document doc;
+//			try
+//			{
+//				doc = Jsoup.connect(item.getLink()).timeout(45000).get();
+//				int pcount = doc.select("div.text p, div.text br").size();
+//				
+//				StringBuilder builder = new StringBuilder(2048);
+//							
+//				for(int i = 0; i < pcount; i++)
+//				{
+//					Element dateElement = doc.select("div.text p, div.text br").get(i);
+//					String dateText = dateElement.text();
+//					builder.append(dateText);
+//					builder.append("\n");
+//				}
+//				
+//				transcript = builder.toString();
+//				return transcript;
+//			} catch (IOException e)
+//			{
+//				e.printStackTrace();
+//				return null;
+//			}
+//		}
+//		
+//		@Override
+//		protected void onPostExecute(String result)
+//		{
+//			super.onPostExecute(result);
+//			loadingBar.setVisibility(View.GONE);
+//			transcriptTextView.setText(result);
+//			item.setTranscript(result);
+//			ListeningDBHelper.updateTranscript(item);
+//		}
+//		
+//		@Override
+//		protected void onPreExecute()
+//		{
+//			super.onPreExecute();
+//			loadingBar.setVisibility(View.VISIBLE);
+//		}
+//	}
 	
 	static class ViewHolder {
 		TextView titleTextView;

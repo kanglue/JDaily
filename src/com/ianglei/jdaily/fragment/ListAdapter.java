@@ -1,10 +1,24 @@
 package com.ianglei.jdaily.fragment;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import android.R.integer;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -19,28 +33,33 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ianglei.jdaily.ImageLoader;
+import com.ianglei.jdaily.NumberCircleProgressBar;
 import com.ianglei.jdaily.R;
+import com.ianglei.jdaily.db.ListeningDBHelper;
 import com.ianglei.jdaily.model.ListeningItem;
 import com.ianglei.jdaily.pic.AsynImageLoader;
 import com.ianglei.jdaily.util.DealSecondClickUtil;
 import com.ianglei.jdaily.util.JUtils;
+import com.ianglei.jdaily.xlist.XListView;
 
 public class ListAdapter extends BaseAdapter
 {
 	private LayoutInflater mInflater;
 	private ArrayList<ListeningItem> lists = new ArrayList<ListeningItem>();
-	private ListView listView;
+	private XListView listView;
 	private static final String TAG = "ListAdapter";
 	private ImageLoader imageLoader;
 	private Context context;
 	private Handler handler;
+	private ViewHolder viewHolder = null;
+	//private Activity activity = null;
 	
-	public ListAdapter(Context context, ListView listView, Handler handler) {
-		mInflater = LayoutInflater.from(context);
+	public ListAdapter(Context context, XListView listView, Handler handler) {
+		//mInflater = LayoutInflater.from(context);
 		this.listView = listView;
 		this.context = context;
 		this.handler = handler;
-		
+		//this.activity = (Activity)context;
 	}
 	
 	public void addItem(String id, String title, String updated, String describe, String link, int learnedtimes)
@@ -86,10 +105,202 @@ public class ListAdapter extends BaseAdapter
 	{
 		return position;
 	}
+	
+	class Mp3Task extends AsyncTask<ListeningItem, Integer, ListeningItem>
+	{
+		ListeningItem item;
+		NumberCircleProgressBar bnp;
+		DownPlayImageView downPlay;
+		
+		public Mp3Task(NumberCircleProgressBar bnp, DownPlayImageView downPlay)
+		{
+			this.bnp = bnp;
+			this.downPlay = downPlay;
+		}
+		
+		@Override
+		protected ListeningItem doInBackground(ListeningItem... params)
+		{
+			Document doc;
+			String localPath = null;
+			String localMp3Path = null;
+			String localPdfPath = null;
+			String transcript = null;
+			
+			try
+			{
+				item = params[0];
+				doc = Jsoup.connect(params[0].getLink()).timeout(45000).get();
+
+				//MP3 and pdf has no fixed order
+				Element aElement1 = doc.select("a.download").get(0);
+				Element aElement2 = doc.select("a.download").get(1);
+				
+				String[] urls = new String[2];
+				
+				urls[0] = aElement1.attr("href");
+				urls[1] = aElement2.attr("href");
+								
+				for(String s : urls)
+				{
+				    localPath = JUtils.getResourcePath(s);
+				    if(localPath.endsWith("mp3"))
+				    {
+				    	localMp3Path = localPath;
+				    }
+				    else if(localPath.endsWith("pdf")){
+				    	localPdfPath = localPath;
+					}
+				    	try
+						{
+							URL url = new URL(s);
+							HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+							urlConnection.setRequestMethod("GET");
+							//urlConnection.setDoOutput(true);
+							urlConnection.connect();
+							
+							BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(localPath));
+							
+							InputStream inputStream = urlConnection.getInputStream();
+							
+							int totalSize = urlConnection.getContentLength();
+		
+				    		//variable to store total downloaded bytes
+				    		int downloadedSize = 0;
+		
+				    		//create a buffer...
+				    		byte[] buffer = new byte[1024000];
+				    		int bufferLength = 0; //used to store a temporary size of the buffer
+		
+				    		//now, read through the input buffer and write the contents to the file
+				    		while ( (bufferLength = inputStream.read(buffer)) != -1 ) {
+				    			//add the data in the buffer to the file in the file output stream (the file on the sd card
+				    			fileOutput.write(buffer, 0, bufferLength);
+				    			//add up the size so we know how much is downloaded
+				    			downloadedSize += bufferLength;
+				    			Log.i(TAG, "download "+downloadedSize+" of "+totalSize);
+		
+				    			publishProgress(Integer.valueOf(100*downloadedSize/totalSize));
+				    			
+				    		}
+				    		Log.i(TAG, "download "+downloadedSize+" of "+totalSize);
+				    		//close the output stream when done
+				    		fileOutput.close();
+				    		urlConnection.disconnect();    		  		
+							
+						} catch (MalformedURLException e1)
+						{
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}		
+				    }
+
+				
+				try {
+
+					//Download transcript
+					doc = Jsoup.connect(item.getLink()).timeout(45000).get();
+					int pcount = doc.select("div.text p, div.text br").size();
+					
+					StringBuilder builder = new StringBuilder(2048);
+								
+					for(int i = 0; i < pcount; i++)
+					{
+						Element dateElement = doc.select("div.text p, div.text br").get(i);
+						String dateText = dateElement.text();
+						builder.append(dateText);
+						builder.append("\n");
+					}
+					
+					transcript = builder.toString();
+					
+					item.setTranscript(transcript);
+					item.setMp3path(localMp3Path);
+					item.setPdfpath(localPdfPath);
+					
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+					return null;
+				}
+				
+				return item;
+				
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onProgressUpdate(Integer... values)
+		{
+			bnp.setProgress(values[0].intValue());
+		}
+		
+		@Override
+		protected void onPreExecute()
+		{
+			super.onPreExecute();
+			bnp.setVisibility(View.VISIBLE);
+		}
+		
+		@Override
+		protected void onPostExecute(ListeningItem result)
+		{
+			super.onPostExecute(result);
+			bnp.setVisibility(View.GONE);
+			downPlay.setBackgroundResource(R.drawable.player_play_highlight);
+			downPlay.setVisibility(View.VISIBLE);
+			notifyDataSetChanged();
+
+			ListeningDBHelper.updateInfoPath(item);
+
+		}
+	}
+		
+	
+	
+	class DownPlayClickListener implements OnClickListener
+	{
+		View convertView;
+		ListeningItem item;
+		
+		public DownPlayClickListener(View convertView)
+		{
+			this.convertView = convertView;
+		}
+		
+		@Override
+		public void onClick(View v) {
+			
+			((ViewHolder)convertView.getTag()).bnp.setVisibility(View.VISIBLE);
+			((ViewHolder)convertView.getTag()).downPlay.setVisibility(View.GONE);
+			
+			if(null != v)
+			{
+				int index = ((DownPlayImageView)v).getIndex();
+				Log.i(TAG, "Download index of item is " + index);
+				item = lists.get(index);
+				
+				Mp3Task task = new Mp3Task(((ViewHolder)convertView.getTag()).bnp,
+						((ViewHolder)convertView.getTag()).downPlay);
+				task.execute(item);
+				
+				notifyDataSetChanged();
+			}
+		}		
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		ViewHolder viewHolder = null;
+		
 		if (convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.item_adapter, null);
@@ -100,6 +311,9 @@ public class ListAdapter extends BaseAdapter
 					.findViewById(R.id.coverimg);
 			viewHolder.descTextView = (TextView) convertView.findViewById(R.id.ItemDesc);
 			viewHolder.listitem = (RelativeLayout)convertView.findViewById(R.id.listitem);
+			viewHolder.downPlay = (DownPlayImageView)convertView.findViewById(R.id.DownPlay);
+			viewHolder.bnp = (NumberCircleProgressBar)convertView.findViewById(R.id.numbercircleprogress_bar);
+			
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -108,18 +322,24 @@ public class ListAdapter extends BaseAdapter
         viewHolder.listitem.setBackgroundColor(position % 2 == 0 ? convertView.getContext()
                 .getResources()
                 .getColor(R.color.white) : convertView.getContext().getResources().getColor(R.color.item_bg));
-		
+        viewHolder.downPlay.setIndex(position);
+        viewHolder.downPlay.setOnClickListener(new DownPlayClickListener(convertView));
+        
 		ListeningItem item = lists.get(position);
 		viewHolder.titleTextView.setText(item.getTitle());
 		viewHolder.descTextView.setText(item.getDescribe());
 		
+		if(item.getMp3path() != null)
+		{
+			if(item.getMp3path().startsWith("http"))
+			{
+				viewHolder.downPlay.setImageResource(R.drawable.download);
+			}
+			else {
+				viewHolder.downPlay.setImageResource(R.drawable.player_play_highlight);
+			}
+		}
 
-			//viewHolder.coverImgView.setImageResource(R.drawable.pic_default);
-
-	        //Bitmap bitmap = BitmapFactory.decodeFile(item.getCoverpath());
-	        //viewHolder.coverImgView.setImageBitmap(bitmap);
-
-			//ImageLoader.getInstance(3 , Type.LIFO).loadImage(item.getCoverpath(), viewHolder.coverImgView);
 		AsynImageLoader loader = new AsynImageLoader();
 		
 		if(item.getCoverpath() == null)
@@ -127,7 +347,7 @@ public class ListAdapter extends BaseAdapter
 			//loader.showImageAsyn(viewHolder.coverImgView, item.getCoverpath(), R.drawable.pic_default);
 			Log.i(TAG, "Cover image is null");
 		}
-		else {
+		else { 
 			if(item.getCoverpath().startsWith("http"))
 			{
 				loader.showImageAsyn(viewHolder.coverImgView, item.getCoverpath(), R.drawable.pic_default);
@@ -142,12 +362,6 @@ public class ListAdapter extends BaseAdapter
 			}
 		}
 		
-
-			
-//		AsynImageLoader imageLoader = new AsynImageLoader();
-//		imageLoader.showImageAsyn(viewHolder.coverImgView, item.getCoverpath(), R.drawable.pic_default);
-        //UrlImageViewHelper.setUrlDrawable(viewHolder.coverImgView, item.getCoverpath(), 0);
-        
 		
 		final int pos = position;
         viewHolder.listitem.setOnClickListener(new OnClickListener()
@@ -178,6 +392,10 @@ public class ListAdapter extends BaseAdapter
 		TextView titleTextView;
 		TextView descTextView;
 		ImageView coverImgView;
+		DownPlayImageView downPlay;
+		NumberCircleProgressBar bnp;
 		RelativeLayout listitem;
 	}
+	
+	
 }
