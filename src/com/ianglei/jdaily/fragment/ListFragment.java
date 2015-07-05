@@ -39,6 +39,7 @@ public class ListFragment extends Fragment implements IXListViewListener
 	private int startPos = 0;
 	private final int step = 10;
 	
+	//临时存放，完整的队列在adapter中存放
 	ArrayList<ListeningItem> list = new ArrayList<ListeningItem>();
 
 	@Override
@@ -72,7 +73,7 @@ public class ListFragment extends Fragment implements IXListViewListener
 				task.execute(new Integer(0));
 			} else
 			{
-				listAdapter.addItem(list);
+				listAdapter.addList(list);
 			}
 		}
 		
@@ -182,7 +183,7 @@ public class ListFragment extends Fragment implements IXListViewListener
 		@Override
 		protected void onPostExecute(ArrayList<ListeningItem> result)
 		{
-			listAdapter.addItem(result);
+			listAdapter.addList(result);
 			//loadingBar.setVisibility(View.GONE);
 			onLoad();
 		}
@@ -234,6 +235,7 @@ public class ListFragment extends Fragment implements IXListViewListener
 		{
 			item = params[0];
 			result = HttpAgent.downloadResource(params[0].getCoverpath());
+			Log.i(TAG, "Title:" + item.getTitle() + " Image:" + params[0]);
 			
 			return result;
 		}
@@ -243,6 +245,7 @@ public class ListFragment extends Fragment implements IXListViewListener
 		{
 			super.onPostExecute(result);
 			item.setCoverpath(result);
+			Log.i(TAG, "Title:" + item.getTitle() + " LocalImage:" + result);
 			ListeningDBHelper.updateCoverImgPath(item);
 		}
 	}
@@ -280,12 +283,12 @@ public class ListFragment extends Fragment implements IXListViewListener
 			@Override
 			public void run() {
 				
-				list.addAll(ListeningDBHelper.getItemListByCategory(6, startPos));
-				
+				listAdapter.addList(ListeningDBHelper.getItemListByCategory(6, startPos));
+				startPos += step;
 				listAdapter.notifyDataSetChanged();
 				onLoad();
 				
-				if(ListeningDBHelper.getCountByCategory(6) == list.size())
+				if(ListeningDBHelper.getCountByCategory(6) == listAdapter.getCount())
 				{
 					listView.setPullLoadEnable(false);
 				}

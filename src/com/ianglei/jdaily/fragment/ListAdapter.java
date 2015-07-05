@@ -13,8 +13,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import android.R.integer;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,13 +20,14 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,6 +45,7 @@ public class ListAdapter extends BaseAdapter
 {
 	private LayoutInflater mInflater;
 	private ArrayList<ListeningItem> lists = new ArrayList<ListeningItem>();
+	private SparseIntArray downloadedList = new SparseIntArray();
 	private XListView listView;
 	private static final String TAG = "ListAdapter";
 	private ImageLoader imageLoader;
@@ -75,7 +75,7 @@ public class ListAdapter extends BaseAdapter
 		notifyDataSetChanged();
 	}
 	
-	public void addItem(ArrayList<ListeningItem> list)
+	public void addList(ArrayList<ListeningItem> list)
 	{
 		this.lists.addAll(list);
 		notifyDataSetChanged();
@@ -110,12 +110,10 @@ public class ListAdapter extends BaseAdapter
 	{
 		ListeningItem item;
 		NumberCircleProgressBar bnp;
-		DownPlayImageView downPlay;
 		
-		public Mp3Task(NumberCircleProgressBar bnp, DownPlayImageView downPlay)
+		public Mp3Task(NumberCircleProgressBar bnp)
 		{
 			this.bnp = bnp;
-			this.downPlay = downPlay;
 		}
 		
 		@Override
@@ -254,9 +252,7 @@ public class ListAdapter extends BaseAdapter
 		protected void onPostExecute(ListeningItem result)
 		{
 			super.onPostExecute(result);
-			bnp.setVisibility(View.GONE);
-			downPlay.setBackgroundResource(R.drawable.player_play_highlight);
-			downPlay.setVisibility(View.VISIBLE);
+			bnp.setVisibility(View.GONE);			
 			notifyDataSetChanged();
 
 			ListeningDBHelper.updateInfoPath(item);
@@ -266,39 +262,9 @@ public class ListAdapter extends BaseAdapter
 		
 	
 	
-	class DownPlayClickListener implements OnClickListener
-	{
-		View convertView;
-		ListeningItem item;
-		
-		public DownPlayClickListener(View convertView)
-		{
-			this.convertView = convertView;
-		}
-		
-		@Override
-		public void onClick(View v) {
-			
-			((ViewHolder)convertView.getTag()).bnp.setVisibility(View.VISIBLE);
-			((ViewHolder)convertView.getTag()).downPlay.setVisibility(View.GONE);
-			
-			if(null != v)
-			{
-				int index = ((DownPlayImageView)v).getIndex();
-				Log.i(TAG, "Download index of item is " + index);
-				item = lists.get(index);
-				
-				Mp3Task task = new Mp3Task(((ViewHolder)convertView.getTag()).bnp,
-						((ViewHolder)convertView.getTag()).downPlay);
-				task.execute(item);
-				
-				notifyDataSetChanged();
-			}
-		}		
-	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(final int position, View convertView, ViewGroup parent)
 	{
 		
 		if (convertView == null) {
@@ -311,7 +277,7 @@ public class ListAdapter extends BaseAdapter
 					.findViewById(R.id.coverimg);
 			viewHolder.descTextView = (TextView) convertView.findViewById(R.id.ItemDesc);
 			viewHolder.listitem = (RelativeLayout)convertView.findViewById(R.id.listitem);
-			viewHolder.downPlay = (DownPlayImageView)convertView.findViewById(R.id.DownPlay);
+			viewHolder.downButton = (ImageView)convertView.findViewById(R.id.DownPlay);
 			viewHolder.bnp = (NumberCircleProgressBar)convertView.findViewById(R.id.numbercircleprogress_bar);
 			
 			convertView.setTag(viewHolder);
@@ -322,8 +288,20 @@ public class ListAdapter extends BaseAdapter
         viewHolder.listitem.setBackgroundColor(position % 2 == 0 ? convertView.getContext()
                 .getResources()
                 .getColor(R.color.white) : convertView.getContext().getResources().getColor(R.color.item_bg));
-        viewHolder.downPlay.setIndex(position);
-        viewHolder.downPlay.setOnClickListener(new DownPlayClickListener(convertView));
+        
+        viewHolder.downButton.setOnClickListener(new OnClickListener(){
+	        @Override  
+	        public void onClick(View v) {  
+	        	viewHolder.downButton.setVisibility(View.GONE);
+	        	viewHolder.bnp.setVisibility(View.VISIBLE);
+	        	downloadedList.put(position, position);
+	        	
+				ListeningItem item = lists.get(position);
+				
+				Mp3Task task = new Mp3Task(viewHolder.bnp);
+				task.execute(item);
+	        }
+        });
         
 		ListeningItem item = lists.get(position);
 		viewHolder.titleTextView.setText(item.getTitle());
@@ -333,11 +311,15 @@ public class ListAdapter extends BaseAdapter
 		{
 			if(item.getMp3path().startsWith("http"))
 			{
-				viewHolder.downPlay.setImageResource(R.drawable.download);
+				viewHolder.downButton.setImageResource(R.drawable.download);
 			}
 			else {
-				viewHolder.downPlay.setImageResource(R.drawable.player_play_highlight);
+				viewHolder.downButton.setVisibility(View.GONE);
 			}
+		}
+		else
+		{
+			
 		}
 
 		AsynImageLoader loader = new AsynImageLoader();
@@ -392,7 +374,7 @@ public class ListAdapter extends BaseAdapter
 		TextView titleTextView;
 		TextView descTextView;
 		ImageView coverImgView;
-		DownPlayImageView downPlay;
+		ImageView downButton;
 		NumberCircleProgressBar bnp;
 		RelativeLayout listitem;
 	}
