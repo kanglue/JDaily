@@ -411,14 +411,6 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int logo=0x7f01004d;
-        /** <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int max=0x7f010070;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -446,7 +438,7 @@ containing a value of this type.
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int numberProgressBarStyle=0x7f010078;
+        public static final int numberProgressBarStyle=0x7f010079;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -460,14 +452,6 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int preserveIconSpacing=0x7f01005c;
-        /** <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int progress=0x7f01006f;
         /**  Specifies the horizontal padding on either end for an embedded progress bar. 
          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
@@ -484,6 +468,22 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int progressBarStyle=0x7f010051;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int progress_current=0x7f01006f;
+        /** <p>Must be an integer value, such as "<code>100</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int progress_max=0x7f010070;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -493,18 +493,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int progress_circle_radius=0x7f010075;
-        /** <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>rotate</code></td><td>0</td><td></td></tr>
-<tr><td><code>rising_water</code></td><td>1</td><td></td></tr>
-</table>
-         */
-        public static final int progress_fill_mode=0x7f010077;
+        public static final int progress_reached_bar_height=0x7f010073;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -522,7 +511,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int progress_text_color=0x7f010074;
+        public static final int progress_text_color=0x7f010076;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -532,7 +521,17 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int progress_text_size=0x7f010073;
+        public static final int progress_text_offset=0x7f010077;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int progress_text_size=0x7f010075;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -543,7 +542,17 @@ containing a value of this type.
 <tr><td><code>invisible</code></td><td>1</td><td></td></tr>
 </table>
          */
-        public static final int progress_text_visibility=0x7f010076;
+        public static final int progress_text_visibility=0x7f010078;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int progress_unreached_bar_height=0x7f010074;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -1195,101 +1204,99 @@ containing a value of this type.
         public static final int xlistview_arrow=0x7f02008d;
     }
     public static final class id {
-        public static final int DownPlay=0x7f09004e;
-        public static final int ItemDesc=0x7f09004d;
-        public static final int ItemTitle=0x7f090043;
-        public static final int ProgressBar=0x7f090049;
-        public static final int Transcript=0x7f090044;
-        public static final int abs__action_bar=0x7f09002b;
-        public static final int abs__action_bar_container=0x7f09002a;
-        public static final int abs__action_bar_subtitle=0x7f09001a;
-        public static final int abs__action_bar_title=0x7f090019;
-        public static final int abs__action_context_bar=0x7f09002c;
+        public static final int DownPlay=0x7f09004a;
+        public static final int ItemDesc=0x7f09004c;
+        public static final int ItemTitle=0x7f090041;
+        public static final int ProgressBar=0x7f090047;
+        public static final int Transcript=0x7f090042;
+        public static final int abs__action_bar=0x7f090029;
+        public static final int abs__action_bar_container=0x7f090028;
+        public static final int abs__action_bar_subtitle=0x7f090018;
+        public static final int abs__action_bar_title=0x7f090017;
+        public static final int abs__action_context_bar=0x7f09002a;
         public static final int abs__action_menu_divider=0x7f090002;
         public static final int abs__action_menu_presenter=0x7f090003;
-        public static final int abs__action_mode_bar=0x7f09002f;
-        public static final int abs__action_mode_bar_stub=0x7f09002e;
-        public static final int abs__action_mode_close_button=0x7f09001d;
-        public static final int abs__activity_chooser_view_content=0x7f09001e;
-        public static final int abs__checkbox=0x7f090027;
-        public static final int abs__content=0x7f090026;
-        public static final int abs__default_activity_button=0x7f090021;
-        public static final int abs__expand_activities_button=0x7f09001f;
+        public static final int abs__action_mode_bar=0x7f09002d;
+        public static final int abs__action_mode_bar_stub=0x7f09002c;
+        public static final int abs__action_mode_close_button=0x7f09001b;
+        public static final int abs__activity_chooser_view_content=0x7f09001c;
+        public static final int abs__checkbox=0x7f090025;
+        public static final int abs__content=0x7f090024;
+        public static final int abs__default_activity_button=0x7f09001f;
+        public static final int abs__expand_activities_button=0x7f09001d;
         public static final int abs__home=0x7f090000;
-        public static final int abs__icon=0x7f090023;
-        public static final int abs__image=0x7f090020;
-        public static final int abs__imageButton=0x7f09001b;
-        public static final int abs__list_item=0x7f090022;
+        public static final int abs__icon=0x7f090021;
+        public static final int abs__image=0x7f09001e;
+        public static final int abs__imageButton=0x7f090019;
+        public static final int abs__list_item=0x7f090020;
         public static final int abs__progress_circular=0x7f090004;
         public static final int abs__progress_horizontal=0x7f090005;
-        public static final int abs__radio=0x7f090029;
-        public static final int abs__search_badge=0x7f090032;
-        public static final int abs__search_bar=0x7f090031;
-        public static final int abs__search_button=0x7f090033;
-        public static final int abs__search_close_btn=0x7f090038;
-        public static final int abs__search_edit_frame=0x7f090034;
-        public static final int abs__search_go_btn=0x7f09003a;
-        public static final int abs__search_mag_icon=0x7f090035;
-        public static final int abs__search_plate=0x7f090036;
-        public static final int abs__search_src_text=0x7f090037;
-        public static final int abs__search_voice_btn=0x7f09003b;
-        public static final int abs__shortcut=0x7f090028;
-        public static final int abs__split_action_bar=0x7f09002d;
-        public static final int abs__submit_area=0x7f090039;
-        public static final int abs__textButton=0x7f09001c;
-        public static final int abs__title=0x7f090024;
-        public static final int abs__titleDivider=0x7f090025;
+        public static final int abs__radio=0x7f090027;
+        public static final int abs__search_badge=0x7f090030;
+        public static final int abs__search_bar=0x7f09002f;
+        public static final int abs__search_button=0x7f090031;
+        public static final int abs__search_close_btn=0x7f090036;
+        public static final int abs__search_edit_frame=0x7f090032;
+        public static final int abs__search_go_btn=0x7f090038;
+        public static final int abs__search_mag_icon=0x7f090033;
+        public static final int abs__search_plate=0x7f090034;
+        public static final int abs__search_src_text=0x7f090035;
+        public static final int abs__search_voice_btn=0x7f090039;
+        public static final int abs__shortcut=0x7f090026;
+        public static final int abs__split_action_bar=0x7f09002b;
+        public static final int abs__submit_area=0x7f090037;
+        public static final int abs__textButton=0x7f09001a;
+        public static final int abs__title=0x7f090022;
+        public static final int abs__titleDivider=0x7f090023;
         public static final int abs__up=0x7f090001;
-        public static final int action_settings=0x7f09005d;
-        public static final int all_time=0x7f09003f;
-        public static final int coverimg=0x7f090042;
-        public static final int details=0x7f090041;
+        public static final int action_settings=0x7f09005b;
+        public static final int all_time=0x7f09003d;
+        public static final int coverimg=0x7f090040;
+        public static final int details=0x7f09003f;
         public static final int disableHome=0x7f09000b;
-        public static final int edit_query=0x7f090030;
+        public static final int edit_query=0x7f09002e;
         public static final int fullscreen=0x7f090013;
         public static final int homeAsUp=0x7f09000c;
         public static final int invisible=0x7f090015;
         public static final int left=0x7f090011;
-        public static final int linear_first=0x7f09004f;
-        public static final int linear_fourth=0x7f090052;
-        public static final int linear_second=0x7f090050;
-        public static final int linear_third=0x7f090051;
+        public static final int linear_first=0x7f09004d;
+        public static final int linear_fourth=0x7f090050;
+        public static final int linear_second=0x7f09004e;
+        public static final int linear_third=0x7f09004f;
         public static final int listMode=0x7f090008;
-        public static final int listitem=0x7f09004b;
+        public static final int listitem=0x7f090049;
         public static final int margin=0x7f090014;
-        public static final int menu=0x7f09004a;
-        public static final int menu_settings=0x7f09005e;
+        public static final int menu=0x7f090048;
+        public static final int menu_settings=0x7f09005c;
         public static final int normal=0x7f090009;
-        public static final int numbercircleprogress_bar=0x7f09004c;
-        public static final int pb=0x7f090045;
-        public static final int play=0x7f090040;
-        public static final int play_time=0x7f09003d;
-        public static final int player=0x7f09003c;
+        public static final int numberbar=0x7f09004b;
+        public static final int pb=0x7f090043;
+        public static final int play=0x7f09003e;
+        public static final int play_time=0x7f09003b;
+        public static final int player=0x7f09003a;
         public static final int right=0x7f090012;
-        public static final int rising_water=0x7f090017;
-        public static final int rotate=0x7f090018;
-        public static final int seekBar=0x7f09003e;
+        public static final int seekBar=0x7f09003c;
         public static final int selected_view=0x7f090006;
         public static final int showCustom=0x7f09000d;
         public static final int showHome=0x7f09000e;
         public static final int showTitle=0x7f09000f;
-        public static final int slidingmenumain=0x7f090053;
-        public static final int sudu=0x7f090046;
+        public static final int slidingmenumain=0x7f090051;
+        public static final int sudu=0x7f090044;
         public static final int tabMode=0x7f09000a;
         public static final int useLogo=0x7f090010;
-        public static final int viewPager=0x7f090047;
+        public static final int viewPager=0x7f090045;
         public static final int visible=0x7f090016;
         public static final int wrap_content=0x7f090007;
-        public static final int xListView=0x7f090048;
-        public static final int xlistview_footer_content=0x7f090054;
-        public static final int xlistview_footer_hint_textview=0x7f090056;
-        public static final int xlistview_footer_progressbar=0x7f090055;
-        public static final int xlistview_header_arrow=0x7f09005b;
-        public static final int xlistview_header_content=0x7f090057;
-        public static final int xlistview_header_hint_textview=0x7f090059;
-        public static final int xlistview_header_progressbar=0x7f09005c;
-        public static final int xlistview_header_text=0x7f090058;
-        public static final int xlistview_header_time=0x7f09005a;
+        public static final int xListView=0x7f090046;
+        public static final int xlistview_footer_content=0x7f090052;
+        public static final int xlistview_footer_hint_textview=0x7f090054;
+        public static final int xlistview_footer_progressbar=0x7f090053;
+        public static final int xlistview_header_arrow=0x7f090059;
+        public static final int xlistview_header_content=0x7f090055;
+        public static final int xlistview_header_hint_textview=0x7f090057;
+        public static final int xlistview_header_progressbar=0x7f09005a;
+        public static final int xlistview_header_text=0x7f090056;
+        public static final int xlistview_header_time=0x7f090058;
     }
     public static final class integer {
         public static final int abs__max_action_buttons=0x7f080000;
@@ -1466,7 +1473,7 @@ containing a value of this type.
         public static final int DialogWindowTitle_Sherlock=0x7f0b0036;
         public static final int DialogWindowTitle_Sherlock_Light=0x7f0b0037;
         public static final int MemuTheme=0x7f0b005d;
-        public static final int NumberCircleProgressBar_Default=0x7f0b005f;
+        public static final int NumberProgressBar_Passing_Green=0x7f0b005f;
         public static final int Sherlock___TextAppearance_Small=0x7f0b004a;
         public static final int Sherlock___Theme=0x7f0b004e;
         public static final int Sherlock___Theme_DarkActionBar=0x7f0b0050;
@@ -1559,40 +1566,42 @@ containing a value of this type.
         public static final int player_progressBarStyleHorizontal=0x7f0b005e;
     }
     public static final class styleable {
-        /** Attributes that can be used with a NumberCircleProgressBar.
+        /** Attributes that can be used with a NumberProgressBar.
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_max com.ianglei.jdaily:max}</code></td><td></td></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_progress com.ianglei.jdaily:progress}</code></td><td></td></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_progress_circle_radius com.ianglei.jdaily:progress_circle_radius}</code></td><td></td></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_progress_fill_mode com.ianglei.jdaily:progress_fill_mode}</code></td><td></td></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_progress_reached_color com.ianglei.jdaily:progress_reached_color}</code></td><td></td></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_progress_text_color com.ianglei.jdaily:progress_text_color}</code></td><td></td></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_progress_text_size com.ianglei.jdaily:progress_text_size}</code></td><td></td></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_progress_text_visibility com.ianglei.jdaily:progress_text_visibility}</code></td><td></td></tr>
-           <tr><td><code>{@link #NumberCircleProgressBar_progress_unreached_color com.ianglei.jdaily:progress_unreached_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_current com.ianglei.jdaily:progress_current}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_max com.ianglei.jdaily:progress_max}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_reached_bar_height com.ianglei.jdaily:progress_reached_bar_height}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_reached_color com.ianglei.jdaily:progress_reached_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_text_color com.ianglei.jdaily:progress_text_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_text_offset com.ianglei.jdaily:progress_text_offset}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_text_size com.ianglei.jdaily:progress_text_size}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_text_visibility com.ianglei.jdaily:progress_text_visibility}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_unreached_bar_height com.ianglei.jdaily:progress_unreached_bar_height}</code></td><td></td></tr>
+           <tr><td><code>{@link #NumberProgressBar_progress_unreached_color com.ianglei.jdaily:progress_unreached_color}</code></td><td></td></tr>
            </table>
-           @see #NumberCircleProgressBar_max
-           @see #NumberCircleProgressBar_progress
-           @see #NumberCircleProgressBar_progress_circle_radius
-           @see #NumberCircleProgressBar_progress_fill_mode
-           @see #NumberCircleProgressBar_progress_reached_color
-           @see #NumberCircleProgressBar_progress_text_color
-           @see #NumberCircleProgressBar_progress_text_size
-           @see #NumberCircleProgressBar_progress_text_visibility
-           @see #NumberCircleProgressBar_progress_unreached_color
+           @see #NumberProgressBar_progress_current
+           @see #NumberProgressBar_progress_max
+           @see #NumberProgressBar_progress_reached_bar_height
+           @see #NumberProgressBar_progress_reached_color
+           @see #NumberProgressBar_progress_text_color
+           @see #NumberProgressBar_progress_text_offset
+           @see #NumberProgressBar_progress_text_size
+           @see #NumberProgressBar_progress_text_visibility
+           @see #NumberProgressBar_progress_unreached_bar_height
+           @see #NumberProgressBar_progress_unreached_color
          */
-        public static final int[] NumberCircleProgressBar = {
+        public static final int[] NumberProgressBar = {
             0x7f01006f, 0x7f010070, 0x7f010071, 0x7f010072,
             0x7f010073, 0x7f010074, 0x7f010075, 0x7f010076,
-            0x7f010077
+            0x7f010077, 0x7f010078
         };
         /**
-          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#max}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
+          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_current}
+          attribute's value can be found in the {@link #NumberProgressBar} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -1601,12 +1610,12 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.ianglei.jdaily:max
+          @attr name com.ianglei.jdaily:progress_current
         */
-        public static final int NumberCircleProgressBar_max = 1;
+        public static final int NumberProgressBar_progress_current = 0;
         /**
-          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
+          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_max}
+          attribute's value can be found in the {@link #NumberProgressBar} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -1615,12 +1624,12 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.ianglei.jdaily:progress
+          @attr name com.ianglei.jdaily:progress_max
         */
-        public static final int NumberCircleProgressBar_progress = 0;
+        public static final int NumberProgressBar_progress_max = 1;
         /**
-          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_circle_radius}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
+          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_reached_bar_height}
+          attribute's value can be found in the {@link #NumberProgressBar} array.
 
 
           <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
@@ -1631,29 +1640,12 @@ in (inches), mm (millimeters).
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.ianglei.jdaily:progress_circle_radius
+          @attr name com.ianglei.jdaily:progress_reached_bar_height
         */
-        public static final int NumberCircleProgressBar_progress_circle_radius = 6;
-        /**
-          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_fill_mode}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
-
-
-          <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>rotate</code></td><td>0</td><td></td></tr>
-<tr><td><code>rising_water</code></td><td>1</td><td></td></tr>
-</table>
-          @attr name com.ianglei.jdaily:progress_fill_mode
-        */
-        public static final int NumberCircleProgressBar_progress_fill_mode = 8;
+        public static final int NumberProgressBar_progress_reached_bar_height = 4;
         /**
           <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_reached_color}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
+          attribute's value can be found in the {@link #NumberProgressBar} array.
 
 
           <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
@@ -1665,10 +1657,10 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.ianglei.jdaily:progress_reached_color
         */
-        public static final int NumberCircleProgressBar_progress_reached_color = 3;
+        public static final int NumberProgressBar_progress_reached_color = 3;
         /**
           <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_text_color}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
+          attribute's value can be found in the {@link #NumberProgressBar} array.
 
 
           <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
@@ -1680,10 +1672,26 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.ianglei.jdaily:progress_text_color
         */
-        public static final int NumberCircleProgressBar_progress_text_color = 5;
+        public static final int NumberProgressBar_progress_text_color = 7;
+        /**
+          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_text_offset}
+          attribute's value can be found in the {@link #NumberProgressBar} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.ianglei.jdaily:progress_text_offset
+        */
+        public static final int NumberProgressBar_progress_text_offset = 8;
         /**
           <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_text_size}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
+          attribute's value can be found in the {@link #NumberProgressBar} array.
 
 
           <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
@@ -1696,10 +1704,10 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.ianglei.jdaily:progress_text_size
         */
-        public static final int NumberCircleProgressBar_progress_text_size = 4;
+        public static final int NumberProgressBar_progress_text_size = 6;
         /**
           <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_text_visibility}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
+          attribute's value can be found in the {@link #NumberProgressBar} array.
 
 
           <p>Must be one of the following constant values.</p>
@@ -1713,10 +1721,26 @@ containing a value of this type.
 </table>
           @attr name com.ianglei.jdaily:progress_text_visibility
         */
-        public static final int NumberCircleProgressBar_progress_text_visibility = 7;
+        public static final int NumberProgressBar_progress_text_visibility = 9;
+        /**
+          <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_unreached_bar_height}
+          attribute's value can be found in the {@link #NumberProgressBar} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.ianglei.jdaily:progress_unreached_bar_height
+        */
+        public static final int NumberProgressBar_progress_unreached_bar_height = 5;
         /**
           <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#progress_unreached_color}
-          attribute's value can be found in the {@link #NumberCircleProgressBar} array.
+          attribute's value can be found in the {@link #NumberProgressBar} array.
 
 
           <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
@@ -1728,7 +1752,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.ianglei.jdaily:progress_unreached_color
         */
-        public static final int NumberCircleProgressBar_progress_unreached_color = 2;
+        public static final int NumberProgressBar_progress_unreached_color = 2;
         /**  Attributes used to style the Action Bar. 
            <p>Includes the following attributes:</p>
            <table>
@@ -4141,7 +4165,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            @see #Themes_numberProgressBarStyle
          */
         public static final int[] Themes = {
-            0x7f010078
+            0x7f010079
         };
         /**
           <p>This symbol is the offset where the {@link com.ianglei.jdaily.R.attr#numberProgressBarStyle}

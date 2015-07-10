@@ -76,16 +76,16 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
     
-   <style name="NumberCircleProgressBar_Default">
+    <style name="NumberProgressBar_Passing_Green">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="max">100</item>
-        <item name="progress">10</item>
+        <item name="progress_max">100</item>
+        <item name="progress_current">0</item>
         <item name="progress_unreached_color">#CCCCCC</item>
-        <item name="progress_reached_color">#3498DB</item>
-        <item name="progress_circle_radius">20dp</item>
+        <item name="progress_reached_color">#70A800</item>
         <item name="progress_text_size">10sp</item>
-        <item name="progress_text_color">#000000</item>
-        <item name="progress_fill_mode">rotate</item>
+        <item name="progress_text_color">#70A800</item>
+        <item name="progress_reached_bar_height">1.5dp</item>
+        <item name="progress_unreached_bar_height">0.75dp</item>
     </style>
 </resources>

@@ -1,26 +1,13 @@
 package com.ianglei.jdaily.fragment;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ianglei.jdaily.ImageLoader;
-import com.ianglei.jdaily.NumberCircleProgressBar;
+import com.ianglei.jdaily.NumberProgressBar;
 import com.ianglei.jdaily.R;
-import com.ianglei.jdaily.db.ListeningDBHelper;
 import com.ianglei.jdaily.model.ListeningItem;
 import com.ianglei.jdaily.pic.AsynImageLoader;
 import com.ianglei.jdaily.util.DealSecondClickUtil;
@@ -52,8 +38,17 @@ public class ListAdapter extends BaseAdapter
 	private Context context;
 	private Handler handler;
 	private ViewHolder viewHolder = null;
+	private UpdateCallback updateCallback;
 	//private Activity activity = null;
 	
+	public UpdateCallback getUpdateCallback() {
+		return updateCallback;
+	}
+
+	public void setUpdateCallback(UpdateCallback updateCallback) {
+		this.updateCallback = updateCallback;
+	}
+
 	public ListAdapter(Context context, XListView listView, Handler handler) {
 		//mInflater = LayoutInflater.from(context);
 		this.listView = listView;
@@ -106,161 +101,6 @@ public class ListAdapter extends BaseAdapter
 		return position;
 	}
 	
-	class Mp3Task extends AsyncTask<ListeningItem, Integer, ListeningItem>
-	{
-		ListeningItem item;
-		NumberCircleProgressBar bnp;
-		
-		public Mp3Task(NumberCircleProgressBar bnp)
-		{
-			this.bnp = bnp;
-		}
-		
-		@Override
-		protected ListeningItem doInBackground(ListeningItem... params)
-		{
-			Document doc;
-			String localPath = null;
-			String localMp3Path = null;
-			String localPdfPath = null;
-			String transcript = null;
-			
-			try
-			{
-				item = params[0];
-				doc = Jsoup.connect(params[0].getLink()).timeout(45000).get();
-
-				//MP3 and pdf has no fixed order
-				Element aElement1 = doc.select("a.download").get(0);
-				Element aElement2 = doc.select("a.download").get(1);
-				
-				String[] urls = new String[2];
-				
-				urls[0] = aElement1.attr("href");
-				urls[1] = aElement2.attr("href");
-								
-				for(String s : urls)
-				{
-				    localPath = JUtils.getResourcePath(s);
-				    if(localPath.endsWith("mp3"))
-				    {
-				    	localMp3Path = localPath;
-				    }
-				    else if(localPath.endsWith("pdf")){
-				    	localPdfPath = localPath;
-					}
-				    	try
-						{
-							URL url = new URL(s);
-							HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-							urlConnection.setRequestMethod("GET");
-							//urlConnection.setDoOutput(true);
-							urlConnection.connect();
-							
-							BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(localPath));
-							
-							InputStream inputStream = urlConnection.getInputStream();
-							
-							int totalSize = urlConnection.getContentLength();
-		
-				    		//variable to store total downloaded bytes
-				    		int downloadedSize = 0;
-		
-				    		//create a buffer...
-				    		byte[] buffer = new byte[1024000];
-				    		int bufferLength = 0; //used to store a temporary size of the buffer
-		
-				    		//now, read through the input buffer and write the contents to the file
-				    		while ( (bufferLength = inputStream.read(buffer)) != -1 ) {
-				    			//add the data in the buffer to the file in the file output stream (the file on the sd card
-				    			fileOutput.write(buffer, 0, bufferLength);
-				    			//add up the size so we know how much is downloaded
-				    			downloadedSize += bufferLength;
-				    			Log.i(TAG, "download "+downloadedSize+" of "+totalSize);
-		
-				    			publishProgress(Integer.valueOf(100*downloadedSize/totalSize));
-				    			
-				    		}
-				    		Log.i(TAG, "download "+downloadedSize+" of "+totalSize);
-				    		//close the output stream when done
-				    		fileOutput.close();
-				    		urlConnection.disconnect();    		  		
-							
-						} catch (MalformedURLException e1)
-						{
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (IOException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}		
-				    }
-
-				
-				try {
-
-					//Download transcript
-					doc = Jsoup.connect(item.getLink()).timeout(45000).get();
-					int pcount = doc.select("div.text p, div.text br").size();
-					
-					StringBuilder builder = new StringBuilder(2048);
-								
-					for(int i = 0; i < pcount; i++)
-					{
-						Element dateElement = doc.select("div.text p, div.text br").get(i);
-						String dateText = dateElement.text();
-						builder.append(dateText);
-						builder.append("\n");
-					}
-					
-					transcript = builder.toString();
-					
-					item.setTranscript(transcript);
-					item.setMp3path(localMp3Path);
-					item.setPdfpath(localPdfPath);
-					
-				} catch (IOException e)
-				{
-					e.printStackTrace();
-					return null;
-				}
-				
-				return item;
-				
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-				return null;
-			}
-		}
-		
-		@Override
-		protected void onProgressUpdate(Integer... values)
-		{
-			bnp.setProgress(values[0].intValue());
-		}
-		
-		@Override
-		protected void onPreExecute()
-		{
-			super.onPreExecute();
-			bnp.setVisibility(View.VISIBLE);
-		}
-		
-		@Override
-		protected void onPostExecute(ListeningItem result)
-		{
-			super.onPostExecute(result);
-			bnp.setVisibility(View.GONE);			
-			notifyDataSetChanged();
-
-			ListeningDBHelper.updateInfoPath(item);
-
-		}
-	}
-		
-	
 	
 	
 	@Override
@@ -278,7 +118,7 @@ public class ListAdapter extends BaseAdapter
 			viewHolder.descTextView = (TextView) convertView.findViewById(R.id.ItemDesc);
 			viewHolder.listitem = (RelativeLayout)convertView.findViewById(R.id.listitem);
 			viewHolder.downButton = (ImageView)convertView.findViewById(R.id.DownPlay);
-			viewHolder.bnp = (NumberCircleProgressBar)convertView.findViewById(R.id.numbercircleprogress_bar);
+			viewHolder.bnp = (NumberProgressBar)convertView.findViewById(R.id.numberbar);
 			
 			convertView.setTag(viewHolder);
 		} else {
@@ -292,20 +132,28 @@ public class ListAdapter extends BaseAdapter
         viewHolder.downButton.setOnClickListener(new OnClickListener(){
 	        @Override  
 	        public void onClick(View v) {  
-	        	viewHolder.downButton.setVisibility(View.GONE);
-	        	viewHolder.bnp.setVisibility(View.VISIBLE);
+
 	        	downloadedList.put(position, position);
-	        	
 				ListeningItem item = lists.get(position);
-				
-				Mp3Task task = new Mp3Task(viewHolder.bnp);
-				task.execute(item);
+
+	        	updateCallback.startProgress(item, position);
 	        }
         });
         
 		ListeningItem item = lists.get(position);
 		viewHolder.titleTextView.setText(item.getTitle());
 		viewHolder.descTextView.setText(item.getDescribe());
+		
+		if(downloadedList.get(position) > 0)
+		{
+			viewHolder.downButton.setVisibility(View.GONE);
+			viewHolder.bnp.setVisibility(View.VISIBLE);
+		}
+		else if(downloadedList.get(position) == 0)
+		{
+			viewHolder.downButton.setVisibility(View.VISIBLE);
+			viewHolder.bnp.setVisibility(View.GONE);
+		}
 		
 		if(item.getMp3path() != null)
 		{
@@ -332,6 +180,7 @@ public class ListAdapter extends BaseAdapter
 		else { 
 			if(item.getCoverpath().startsWith("http"))
 			{
+				Log.i(TAG, "Title: " + item.getTitle() + " NetCover: " + item.getCoverpath());
 				loader.showImageAsyn(viewHolder.coverImgView, item.getCoverpath(), R.drawable.pic_default);
 				String localPath = JUtils.getResourcePath(item.getCoverpath());
 				item.setCoverpath(localPath);
@@ -339,6 +188,7 @@ public class ListAdapter extends BaseAdapter
 			else {
 				//从本地加载
 				//String localPath = JUtils.getResourcePath(item.getCoverpath());
+				Log.i(TAG, "Title: " + item.getTitle() + " LocalCover: " + item.getCoverpath());
 				Bitmap bitmap = BitmapFactory.decodeFile(item.getCoverpath());
 				viewHolder.coverImgView.setImageBitmap(bitmap);
 			}
@@ -375,7 +225,7 @@ public class ListAdapter extends BaseAdapter
 		TextView descTextView;
 		ImageView coverImgView;
 		ImageView downButton;
-		NumberCircleProgressBar bnp;
+		NumberProgressBar bnp;
 		RelativeLayout listitem;
 	}
 	
